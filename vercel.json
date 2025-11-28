@@ -1,6 +1,0 @@
-{
-  "buildCommand": "cd documentacion_pl && npm install && npm run build",
-  "outputDirectory": "documentacion_pl/.next",
-  "installCommand": "cd documentacion_pl && npm install",
-  "framework": "nextjs"
-}
