@@ -1,0 +1,127 @@
+# Solución de Problemas
+
+Encuentra soluciones a los problemas más comunes.
+
+## Problemas de Instalación
+
+### Error: pip install falla
+
+**Síntoma:** Errores durante la instalación de dependencias.
+
+**Soluciones:**
+1. Verifica tu versión de Python:
+   ```bash
+   python --version  # Debe ser 3.10+
+   ```
+2. Actualiza pip:
+   ```bash
+   python -m pip install --upgrade pip
+   ```
+3. Instala dependencias una por una si hay conflictos:
+   ```bash
+   pip install numpy sympy django matplotlib
+   ```
+
+### Error: GROQ_API_KEY no configurada
+
+**Síntoma:** El análisis con IA no funciona.
+
+**Solución:**
+1. Obtén tu API key en https://console.groq.com
+2. Crea/edita el archivo `.env`:
+   ```
+   GROQ_API_KEY="gsk_tu_api_key_aqui"
+   ```
+3. Reinicia el servidor
+
+### Error: Puerto 8000 en uso
+
+**Síntoma:** `Address already in use`
+
+**Solución:**
+```bash
+# En Windows
+netstat -ano | findstr :8000
+taskkill /PID numero_pid /F
+
+# O usa otro puerto
+python manage.py runserver 8001
+```
+
+## Errores de la API
+
+### Error 400: "El problema no es lineal"
+
+**Causa:** El problema contiene términos no lineales (como x², xy, sin(x)).
+
+**Solución:** Reformula el problema usando solo términos lineales.
+
+### Error 400: "Método no aplicable"
+
+**Causa:** El método seleccionado no es compatible con el tipo de problema.
+
+| Mensaje | Causa | Solución |
+|---------|-------|----------|
+| "Simplex solo para maximización" | Problema de minimización | Usa Dual Simplex o Big M |
+| "Dual Simplex solo para minimización" | Problema de maximización | Usa Simplex o Big M |
+| "Gráfico solo para 2 variables" | Más de 2 variables | Usa Simplex o Big M |
+
+### Error: "Problema infactible"
+
+**Causa:** Las restricciones son contradictorias.
+
+**Ejemplo de problema infactible:**
+```
+x₁ + x₂ ≥ 5
+x₁ + x₂ ≤ 3  ← Contradice la anterior
+```
+
+**Solución:** Revisa que las restricciones sean consistentes.
+
+### Error: "Problema no acotado"
+
+**Causa:** La función objetivo puede crecer infinitamente.
+
+**Solución:** Agrega restricciones que limiten las variables.
+
+## Problemas de Visualización
+
+### Las tablas no se muestran correctamente
+
+**Soluciones:**
+1. Usa un navegador moderno (Chrome, Firefox, Edge)
+2. Desactiva extensiones que bloqueen JavaScript
+3. Limpia la caché del navegador
+
+### El método gráfico no genera imagen
+
+**Causa:** Matplotlib no está configurado correctamente.
+
+**Solución:**
+```bash
+pip install matplotlib --upgrade
+```
+
+## Problemas de Rendimiento
+
+### El análisis es muy lento
+
+**Posibles causas:**
+1. Conexión lenta a Groq API
+2. Problema muy complejo
+
+**Soluciones:**
+1. Verifica tu conexión a internet
+2. Simplifica el problema si es posible
+3. Usa un modelo de Groq más rápido en `.env`:
+   ```
+   GROQ_MODEL="llama2-70b-4096"
+   ```
+
+## Obtener más ayuda
+
+Si tu problema no está listado aquí:
+
+- Revisa las [Preguntas Frecuentes](/docs/faq)
+- Abre un issue en [GitHub](https://github.com/Xan007/Suite-Optimizacion-Lineal/issues)
+- Revisa los logs del servidor para más detalles

@@ -1,0 +1,177 @@
+# Métodos de Solución
+
+La Suite de Optimización Lineal implementa cuatro métodos principales para resolver problemas de programación lineal.
+
+## Método Simplex
+
+### Descripción
+El método Simplex es el algoritmo más utilizado para resolver problemas de programación lineal. Fue desarrollado por George Dantzig en 1947.
+
+### ¿Cuándo usarlo?
+- Problemas de **maximización**
+- Restricciones tipo **≤** (menor o igual)
+- Cualquier número de variables
+
+### Funcionamiento
+1. Convierte el problema a forma estándar (agrega variables de holgura)
+2. Construye el tableau inicial
+3. Identifica la columna pivote (coeficiente más negativo en fila Z)
+4. Identifica la fila pivote (razón mínima positiva)
+5. Realiza operaciones de pivoteo
+6. Repite hasta que no haya coeficientes negativos en Z
+
+### Ejemplo de Tableau
+
+| Base | Z | x₁ | x₂ | s₁ | s₂ | RHS |
+|------|---|----|----|----|----|-----|
+| Z    | 1 | -3 | -2 | 0  | 0  | 0   |
+| s₁   | 0 | 2  | 1  | 1  | 0  | 10  |
+| s₂   | 0 | 1  | 2  | 0  | 1  | 8   |
+
+---
+
+## Método Simplex Dual
+
+### Descripción
+El Simplex Dual trabaja de manera opuesta al Simplex Primal. Mantiene la optimalidad y busca la factibilidad.
+
+### ¿Cuándo usarlo?
+- Problemas de **minimización**
+- Restricciones tipo **≥** (mayor o igual)
+- Cuando el problema primal tiene una base dual factible
+
+### Funcionamiento
+1. Inicia con una solución óptima pero posiblemente infactible
+2. Selecciona la fila pivote (RHS más negativo)
+3. Selecciona la columna pivote (razón dual)
+4. Realiza el pivoteo
+5. Repite hasta que todos los RHS sean no negativos
+
+### Colores en la Visualización
+
+| Color | Elemento | Significado |
+|-------|----------|-------------|
+| 🔴 Rojo | Elemento pivote | Celda donde ocurre el pivoteo |
+| 🌸 Rosa | Fila pivote | Variable que sale de la base |
+| 💙 Azul | Columna pivote | Variable que entra a la base |
+| 🟢 Verde | Óptimo | Solución encontrada |
+| 🟠 Naranja | RHS negativo | Solución aún infactible |
+
+---
+
+## Método Big M
+
+### Descripción
+El método de la Gran M permite resolver problemas con cualquier tipo de restricción utilizando variables artificiales penalizadas con un valor muy grande (M).
+
+### ¿Cuándo usarlo?
+- Restricciones tipo **≥** o **=**
+- Problemas mixtos (combinación de ≤, ≥, =)
+- Tanto maximización como minimización
+
+### Funcionamiento
+1. Agrega variables de holgura para restricciones ≤
+2. Agrega variables de exceso y **artificiales** para restricciones ≥
+3. Agrega variables **artificiales** para restricciones =
+4. Penaliza las artificiales con ±M en la función objetivo
+5. Resuelve con el método Simplex
+6. Si hay variables artificiales en la solución final → problema infactible
+
+### Penalización
+
+| Tipo de problema | Penalización |
+|------------------|--------------|
+| Maximización | -M (muy negativo) |
+| Minimización | +M (muy positivo) |
+
+Donde M es típicamente 10⁶ o mayor.
+
+### Ejemplo
+
+Para minimizar Z = 2x₁ + 3x₂ con x₁ + x₂ ≥ 4:
+
+```
+Min Z = 2x₁ + 3x₂ + M·a₁
+
+Sujeto a:
+x₁ + x₂ - e₁ + a₁ = 4
+
+Donde:
+- e₁ = variable de exceso
+- a₁ = variable artificial
+- M = constante muy grande
+```
+
+---
+
+## Método Gráfico
+
+### Descripción
+El método gráfico resuelve problemas de **exactamente 2 variables** visualizando la región factible y encontrando el punto óptimo.
+
+### ¿Cuándo usarlo?
+- **Solo 2 variables** de decisión
+- Para visualizar y entender el problema
+- Propósitos educativos
+
+### Funcionamiento
+1. Grafica cada restricción como una línea o región
+2. Identifica la **región factible** (intersección de todas las restricciones)
+3. Encuentra los **vértices** de la región factible
+4. Evalúa la función objetivo en cada vértice
+5. El vértice con el mejor valor es la solución óptima
+
+### Elementos Visuales
+
+- **Líneas de restricción**: Cada restricción se representa como una línea
+- **Región factible**: Área sombreada donde se cumplen todas las restricciones
+- **Función objetivo**: Líneas de iso-beneficio/iso-costo
+- **Punto óptimo**: Vértice marcado con la solución
+
+### Limitación importante
+
+Este método **solo funciona con 2 variables**. Para más variables, usa Simplex, Dual o Big M.
+
+---
+
+## Comparación de Métodos
+
+| Característica | Simplex | Dual Simplex | Big M | Gráfico |
+|----------------|---------|--------------|-------|---------|
+| Maximización | ✅ | ⚠️ | ✅ | ✅ |
+| Minimización | ⚠️ | ✅ | ✅ | ✅ |
+| Restricciones ≤ | ✅ | ⚠️ | ✅ | ✅ |
+| Restricciones ≥ | ⚠️ | ✅ | ✅ | ✅ |
+| Restricciones = | ❌ | ❌ | ✅ | ✅ |
+| Múltiples variables | ✅ | ✅ | ✅ | ❌ (solo 2) |
+| Visualización | Tablas | Tablas | Tablas | Gráfica |
+
+**Leyenda:**
+- ✅ Óptimo/Recomendado
+- ⚠️ Posible pero no óptimo
+- ❌ No aplicable
+
+---
+
+## Detección de Casos Especiales
+
+### Problema Infactible
+No existe solución que cumpla todas las restricciones.
+
+**Detección:**
+- Simplex/Dual: Variables artificiales permanecen en la base
+- Gráfico: Región factible vacía
+
+### Problema No Acotado
+La función objetivo puede crecer/decrecer infinitamente.
+
+**Detección:**
+- Simplex: Todos los cocientes son negativos o indefinidos
+- Gráfico: Región factible no acotada en dirección de optimización
+
+### Soluciones Múltiples
+Existen infinitas soluciones óptimas.
+
+**Detección:**
+- Coeficiente cero en la fila Z para variable no básica
+- Gráfico: La función objetivo es paralela a una restricción activa

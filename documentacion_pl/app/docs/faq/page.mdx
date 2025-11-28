@@ -1,0 +1,96 @@
+# Preguntas Frecuentes
+
+Respuestas a las preguntas más comunes sobre la Suite de Optimización Lineal.
+
+## General
+
+### ¿Qué es la Suite de Optimización Lineal?
+
+Es una aplicación web que combina Inteligencia Artificial con algoritmos matemáticos para resolver problemas de programación lineal. Puedes escribir problemas en lenguaje natural y el sistema los resuelve automáticamente.
+
+### ¿Es gratuito?
+
+Sí, el sistema es completamente gratuito y de código abierto. Solo necesitas una API key de Groq (también gratuita) para el análisis con IA.
+
+### ¿Necesito conexión a internet?
+
+- **Para análisis con IA**: Sí, se conecta a la API de Groq
+- **Para resolver (sin IA)**: No, los algoritmos corren localmente
+
+### ¿Qué tipos de problemas puede resolver?
+
+- Problemas de **maximización** (ganancias, producción, etc.)
+- Problemas de **minimización** (costos, tiempo, etc.)
+- Con restricciones tipo ≤, ≥ o =
+- Con cualquier número de variables (gráfico solo para 2)
+
+## Uso del Sistema
+
+### ¿Cuántas variables puedo usar?
+
+No hay límite para los métodos Simplex, Dual y Big M. El método gráfico solo funciona con **2 variables**.
+
+### ¿Qué método debo elegir?
+
+| Tu problema | Método recomendado |
+|-------------|-------------------|
+| Maximizar con restricciones ≤ | Simplex |
+| Minimizar con restricciones ≥ | Simplex Dual |
+| Restricciones mixtas | Big M |
+| 2 variables (visualizar) | Gráfico |
+
+El sistema te sugiere automáticamente los métodos aplicables.
+
+### ¿Puedo editar el modelo extraído?
+
+Sí, después del análisis puedes modificar la función objetivo, restricciones y variables antes de resolver.
+
+### ¿Qué significa "problema infactible"?
+
+Significa que las restricciones son contradictorias y no existe ninguna solución que las cumpla todas.
+
+### ¿Qué significa "problema no acotado"?
+
+Significa que la función objetivo puede crecer (o decrecer) infinitamente. Generalmente indica que faltan restricciones.
+
+## Análisis de Sensibilidad
+
+### ¿Qué es el precio sombra?
+
+Es el valor marginal de un recurso. Indica cuánto aumentaría el valor óptimo si tuvieras una unidad más de ese recurso.
+
+**Ejemplo:** Si el precio sombra de "horas de trabajo" es 5 dólares, significa que una hora extra de trabajo aumentaría tus ganancias en 5 dólares.
+
+### ¿Qué son los rangos de optimalidad?
+
+Indican cuánto pueden variar los coeficientes de la función objetivo sin que cambie la solución óptima (qué variables son básicas).
+
+### ¿Qué son los costos reducidos?
+
+Para variables que están en cero en la solución óptima, indican cuánto debe mejorar su coeficiente para que valga la pena producir/usar esa variable.
+
+## Técnico
+
+### ¿Qué tecnologías usa el sistema?
+
+- **Backend**: Python, Django, SymPy, NumPy, Matplotlib
+- **IA**: Groq API (Mixtral, LLaMA)
+- **Frontend**: HTML, JavaScript, CSS
+
+### ¿Puedo usar la API desde mi aplicación?
+
+Sí, todos los endpoints están disponibles. Consulta la [Referencia API](/docs/api) para más detalles.
+
+### ¿Cómo puedo contribuir al proyecto?
+
+1. Haz un fork en GitHub
+2. Crea una rama para tu mejora
+3. Envía un Pull Request
+
+### ¿Dónde puedo reportar errores?
+
+Abre un issue en: https://github.com/Xan007/Suite-Optimizacion-Lineal/issues
+
+## ¿No encontraste tu pregunta?
+
+Consulta la sección de [Solución de Problemas](/docs/troubleshooting) o abre un issue en GitHub.

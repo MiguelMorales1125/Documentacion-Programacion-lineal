@@ -1,1 +1,1 @@
-# Documentaci-n-Programaci-n-lineal
+# Documentacion-Programacion-lineal

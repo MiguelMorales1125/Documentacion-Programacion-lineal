@@ -1,0 +1,334 @@
+# Referencia API
+
+La Suite de Optimización Lineal expone una API REST completa para integración con otros sistemas.
+
+## URL Base
+
+```
+http://localhost:8000/api/v1
+```
+
+---
+
+## Endpoints
+
+### Health Check
+
+Verifica que el servidor esté funcionando.
+
+```http
+GET /api/v1/test/
+```
+
+**Respuesta:**
+```json
+{
+  "message": "Test done"
+}
+```
+
+---
+
+### Analizar Problema
+
+Analiza un problema en lenguaje natural usando IA y extrae el modelo matemático.
+
+```http
+POST /api/v1/analyze/
+```
+
+**Request:**
+```json
+{
+  "problem": "Una fábrica produce dos productos A y B. El producto A genera 3 dólares de ganancia y requiere 2 horas de trabajo. El producto B genera 2 dólares y requiere 1 hora. Hay 10 horas disponibles. Maximizar ganancias.",
+  "api_key": "opcional-tu-groq-api-key",
+  "groq_model": "mixtral-8x7b-32768"
+}
+```
+
+**Respuesta exitosa:**
+```json
+{
+  "raw_analysis": "Análisis textual de Groq...",
+  "mathematical_model": {
+    "objective_function": "3*x1 + 2*x2",
+    "objective": "max",
+    "constraints": ["2*x1 + x2 <= 10", "x1 >= 0", "x2 >= 0"],
+    "variables": {
+      "x1": "Unidades de producto A",
+      "x2": "Unidades de producto B"
+    },
+    "context": "Fábrica con 2 productos..."
+  },
+  "representations": {
+    "canonical": {},
+    "standard": {},
+    "matrix": {},
+    "dual": {}
+  },
+  "suggested_methods": ["simplex", "graphical", "big_m"],
+  "methods_not_applicable": {
+    "dual_simplex": "Solo aplicable a problemas de minimización"
+  },
+  "groq_model": "mixtral-8x7b-32768",
+  "is_linear": true
+}
+```
+
+---
+
+### Resolver Modelo
+
+Resuelve un modelo matemático usando el método especificado.
+
+```http
+POST /api/v1/analyze/solve
+```
+
+**Request:**
+```json
+{
+  "model": {
+    "objective_function": "3*x1 + 2*x2",
+    "objective": "max",
+    "constraints": ["2*x1 + x2 <= 10", "x1 >= 0", "x2 >= 0"],
+    "variables": {
+      "x1": "Unidades de producto A",
+      "x2": "Unidades de producto B"
+    }
+  },
+  "method": "simplex"
+}
+```
+
+**Métodos disponibles:**
+- `simplex` - Método Simplex (maximización)
+- `dual_simplex` - Simplex Dual (minimización)
+- `big_m` - Método de la Gran M (restricciones mixtas)
+- `graphical` - Método Gráfico (solo 2 variables)
+
+**Respuesta exitosa:**
+```json
+{
+  "success": true,
+  "result": {
+    "status": "optimal",
+    "objective_value": 15.0,
+    "variables": {
+      "x1": 5.0,
+      "x2": 0.0
+    },
+    "iterations": 2,
+    "steps": [],
+    "html_visualization": "<html>...</html>",
+    "sensitivity_analysis": {
+      "shadow_prices": [],
+      "objective_ranges": [],
+      "rhs_ranges": [],
+      "reduced_costs": []
+    }
+  }
+}
+```
+
+---
+
+### Validar Modelo
+
+Valida la sintaxis de un modelo matemático.
+
+```http
+POST /api/v1/analyze/validate-model
+```
+
+**Request:**
+```json
+{
+  "objective_function": "3*x1 + 2*x2",
+  "constraints": ["2*x1 + x2 <= 10"],
+  "variables": {"x1": "Var 1", "x2": "Var 2"}
+}
+```
+
+**Respuesta:**
+```json
+{
+  "valid": true,
+  "errors": []
+}
+```
+
+---
+
+### Obtener Representaciones
+
+Genera todas las representaciones de un modelo.
+
+```http
+POST /api/v1/analyze/get-representations
+```
+
+**Request:**
+```json
+{
+  "objective_function": "3*x1 + 2*x2",
+  "objective": "max",
+  "constraints": ["2*x1 + x2 <= 10", "x1 >= 0", "x2 >= 0"],
+  "variables": {"x1": "Producto A", "x2": "Producto B"}
+}
+```
+
+**Respuesta:**
+```json
+{
+  "success": true,
+  "representations": {
+    "canonical": {
+      "objective_function": "max Z = 3x₁ + 2x₂",
+      "constraints": ["2x₁ + x₂ ≤ 10"],
+      "non_negativity": ["x₁ ≥ 0", "x₂ ≥ 0"]
+    },
+    "standard": {
+      "objective_function": "max Z = 3x₁ + 2x₂ + 0s₁",
+      "constraints": ["2x₁ + x₂ + s₁ = 10"]
+    },
+    "matrix": {
+      "c": [3, 2],
+      "A": [[2, 1]],
+      "b": [10]
+    },
+    "dual": {
+      "objective_function": "min W = 10y₁",
+      "constraints": ["2y₁ ≥ 3", "y₁ ≥ 2"]
+    }
+  }
+}
+```
+
+---
+
+## Códigos de Error
+
+| Código | Descripción | Solución |
+|--------|-------------|----------|
+| 200 | Éxito | - |
+| 400 | Problema no lineal o método no aplicable | Revisa el modelo o usa otro método |
+| 401 | API key faltante | Configura GROQ_API_KEY |
+| 500 | Error interno | Revisa los logs del servidor |
+
+### Ejemplos de Error
+
+**Problema no lineal:**
+```json
+{
+  "success": false,
+  "error": "El problema no es lineal"
+}
+```
+
+**Método no aplicable:**
+```json
+{
+  "success": false,
+  "error": "El método Simplex Dual solo se aplica a problemas de minimización"
+}
+```
+
+**Problema infactible:**
+```json
+{
+  "success": false,
+  "status": "infeasible",
+  "error": "El problema es infactible (no existe región factible)",
+  "iterations": 2,
+  "steps": []
+}
+```
+
+---
+
+## Ejemplos de Integración
+
+### Python
+
+```python
+import requests
+
+url = "http://localhost:8000/api/v1/analyze/solve"
+payload = {
+    "model": {
+        "objective_function": "2*x1 + 3*x2",
+        "objective": "min",
+        "constraints": ["x1 + x2 >= 4", "x1 >= 0", "x2 >= 0"],
+        "variables": {"x1": "Var 1", "x2": "Var 2"}
+    },
+    "method": "dual_simplex"
+}
+
+response = requests.post(url, json=payload)
+result = response.json()
+
+print(f"Valor óptimo: {result['result']['objective_value']}")
+print(f"x1 = {result['result']['variables']['x1']}")
+print(f"x2 = {result['result']['variables']['x2']}")
+```
+
+### JavaScript / Fetch
+
+```javascript
+const response = await fetch('http://localhost:8000/api/v1/analyze/solve', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    model: {
+      objective_function: "3*x1 + 2*x2",
+      objective: "max",
+      constraints: ["2*x1 + x2 <= 10", "x1 >= 0", "x2 >= 0"],
+      variables: { x1: "Producto A", x2: "Producto B" }
+    },
+    method: "simplex"
+  })
+});
+
+const data = await response.json();
+console.log("Valor óptimo:", data.result.objective_value);
+```
+
+### cURL
+
+```bash
+curl -X POST http://localhost:8000/api/v1/analyze/solve \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": {
+      "objective_function": "2*x1 + 3*x2",
+      "objective": "min",
+      "constraints": ["x1 + x2 >= 4", "x1 >= 0", "x2 >= 0"],
+      "variables": {"x1": "Var 1", "x2": "Var 2"}
+    },
+    "method": "dual_simplex"
+  }'
+```
+
+---
+
+## Estructura del Modelo Matemático
+
+```typescript
+interface MathematicalModel {
+  objective_function: string;     // "3*x1 + 2*x2"
+  objective: "max" | "min";       // Tipo de optimización
+  constraints: string[];          // ["2*x1 + x2 <= 10", ...]
+  variables: {                    // Descripción de variables
+    [key: string]: string;
+  };
+  context?: string;               // Contexto del problema (opcional)
+}
+```
+
+### Formato de expresiones
+
+- Variables: `x1`, `x2`, `x3`, etc.
+- Operadores: `+`, `-`, `*`
+- Comparadores: `<=`, `>=`, `=`
+- Ejemplo: `"2*x1 + 3*x2 - x3 <= 100"`

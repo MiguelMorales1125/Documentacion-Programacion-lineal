@@ -1,0 +1,100 @@
+# Instalación
+
+Sigue estos pasos para instalar y configurar la Suite de Optimización Lineal en tu equipo.
+
+## Requisitos del sistema
+
+| Requisito | Versión mínima |
+|-----------|----------------|
+| Python    | 3.10 o superior |
+| pip       | 21.x o superior |
+| Navegador | Chrome, Firefox, Edge (actualizado) |
+
+### Dependencias principales
+
+- **NumPy**: Cálculos numéricos
+- **SymPy**: Procesamiento matemático simbólico
+- **Django**: Framework web
+- **Matplotlib**: Visualización gráfica
+
+## Instalación paso a paso
+
+### 1. Clonar el repositorio
+
+```bash
+git clone https://github.com/Xan007/Suite-Optimizacion-Lineal.git
+cd Suite-Optimizacion-Lineal/backend
+```
+
+### 2. Crear entorno virtual
+
+En Windows (PowerShell):
+```powershell
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+```
+
+En Linux/Mac:
+```bash
+python -m venv .venv
+source .venv/bin/activate
+```
+
+### 3. Instalar dependencias
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Configurar variables de entorno
+
+Crea o edita el archivo `.env` en la carpeta `backend/`:
+
+```
+PROJECT_NAME="Suite de Optimización Lineal"
+GROQ_API_KEY="tu-api-key-aqui"
+GROQ_MODEL="mixtral-8x7b-32768"
+ENVIRONMENT="local"
+```
+
+Obtén tu API Key gratuita en: https://console.groq.com
+
+### 5. Ejecutar migraciones de Django
+
+```bash
+python manage.py migrate
+```
+
+### 6. Iniciar el servidor
+
+```bash
+python manage.py runserver
+```
+
+## Verificar la instalación
+
+1. Abre tu navegador
+2. Visita `http://localhost:8000`
+3. Deberías ver la interfaz principal de la Suite
+
+### Test rápido
+
+Puedes verificar que todo funcione ejecutando:
+
+```bash
+python quick_test.py
+```
+
+Deberías ver:
+```
+✓ matplotlib importado
+✓ numpy importado
+✓ sympy importado
+✓ GraphicationService importado
+✓ SolverService importado
+✅ Todos los imports exitosos
+```
+
+## ¿Problemas con la instalación?
+
+Si encuentras algún error, consulta la sección de [Solución de Problemas](/docs/troubleshooting).

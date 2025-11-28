@@ -1,0 +1,82 @@
+# Características
+
+Conoce todas las funcionalidades que ofrece la Suite de Optimización Lineal.
+
+## 🤖 Análisis con Inteligencia Artificial
+
+### Procesamiento de Lenguaje Natural
+Ingresa problemas en **texto plano** y el sistema los interpreta automáticamente:
+
+> "Una fábrica produce sillas y mesas. Cada silla requiere 4 horas de trabajo y genera 70 dólares de ganancia. Cada mesa requiere 6 horas y genera 120 dólares. Disponemos de 120 horas. Maximizar ganancias."
+
+El sistema extrae automáticamente:
+- Función objetivo: `Z = 70x₁ + 120x₂`
+- Restricciones
+- Variables de decisión con sus descripciones
+
+### Análisis de Imágenes
+También puedes subir **imágenes** de problemas escritos a mano o en documentos.
+
+## 📊 Métodos de Solución
+
+| Método | Uso recomendado |
+|--------|----------------|
+| **Simplex** | Problemas de maximización con restricciones ≤ |
+| **Simplex Dual** | Problemas de minimización con restricciones ≥ |
+| **Big M** | Problemas con restricciones mixtas (≤, ≥, =) |
+| **Método Gráfico** | Problemas de 2 variables (visualización) |
+
+## 🎨 Visualización Paso a Paso
+
+Cada método genera visualizaciones HTML con:
+
+| Color | Significado |
+|-------|-------------|
+| 🔴 Rojo | Elemento pivote |
+| 🌸 Rosa | Fila pivote (variable saliente) |
+| 💙 Azul | Columna pivote (variable entrante) |
+| 🟢 Verde | Solución óptima encontrada |
+| 🟠 Naranja | Valor RHS negativo (infactible) |
+
+## 📈 Análisis de Sensibilidad Post-Óptimo
+
+Una vez encontrada la solución óptima, el sistema proporciona:
+
+### Precios Sombra
+Valor marginal de cada recurso - ¿Cuánto vale una unidad adicional?
+
+### Rangos de Optimalidad
+Cuánto pueden variar los coeficientes de la función objetivo sin cambiar la solución.
+
+### Rangos de Factibilidad
+Cuánto pueden variar los valores RHS sin cambiar la base óptima.
+
+### Costos Reducidos
+Para variables no básicas, indica cuánto debe mejorar su coeficiente para entrar a la base.
+
+## 🤖 Informes Ejecutivos con IA
+
+Genera automáticamente un informe profesional que incluye:
+- Interpretación de resultados en lenguaje natural
+- Recomendaciones basadas en el análisis
+- Resumen ejecutivo para presentaciones
+
+## 📐 Representaciones del Modelo
+
+El sistema genera múltiples representaciones:
+
+- **Forma Canónica**: Modelo original
+- **Forma Estándar**: Con variables de holgura
+- **Forma Matricial**: Para análisis computacional
+- **Problema Dual**: Formulación dual del problema
+
+## 🔌 API REST
+
+Todos los endpoints están disponibles para integración:
+
+```
+POST /api/v1/analyze/          - Analizar problema
+POST /api/v1/analyze/solve     - Resolver modelo
+POST /api/v1/analyze/validate-model  - Validar modelo
+GET  /api/v1/test/             - Health check
+```

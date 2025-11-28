@@ -1,0 +1,126 @@
+# Manual de Uso
+
+Aprende a utilizar todas las funcionalidades del sistema paso a paso.
+
+## Interfaz Principal
+
+Al acceder a `http://localhost:8000`, encontrarás:
+
+1. **Área de entrada de texto**: Para escribir el problema en lenguaje natural
+2. **Carga de imagen**: Para subir fotos de problemas
+3. **Panel de modelo**: Muestra el modelo matemático extraído
+4. **Selector de métodos**: Elige el algoritmo de solución
+5. **Panel de solución**: Resultados y visualizaciones
+
+## Flujo de Trabajo
+
+### Paso 1: Ingresar el Problema
+
+Escribe tu problema en el área de texto. Ejemplo:
+
+> Una fábrica produce dos productos A y B. El producto A requiere 2 horas de trabajo y genera 3 dólares de ganancia. El producto B requiere 1 hora y genera 2 dólares. Hay disponibles 10 horas de trabajo. Maximizar la ganancia total.
+
+O sube una imagen con el botón **"Cargar imagen"**.
+
+### Paso 2: Analizar el Problema
+
+Haz clic en **"Analizar"**. El sistema usará IA para:
+
+1. Interpretar el texto/imagen
+2. Identificar la función objetivo
+3. Extraer las restricciones
+4. Definir las variables
+
+**Resultado del análisis:**
+
+```
+📈 Maximizar: Z = 3x₁ + 2x₂
+
+Sujeto a:
+  2x₁ + x₂ ≤ 10
+  x₁ ≥ 0
+  x₂ ≥ 0
+
+Donde:
+  x₁ = Unidades de producto A
+  x₂ = Unidades de producto B
+```
+
+### Paso 3: Seleccionar Método
+
+El sistema sugiere métodos aplicables según el tipo de problema:
+
+- **Simplex**: Para maximización con restricciones ≤
+- **Dual Simplex**: Para minimización con restricciones ≥
+- **Big M**: Para restricciones mixtas
+- **Gráfico**: Solo para 2 variables
+
+Los métodos no aplicables aparecerán deshabilitados con la razón.
+
+### Paso 4: Resolver
+
+Haz clic en **"▶ Ejecutar Método Seleccionado"**.
+
+### Paso 5: Interpretar Resultados
+
+El sistema muestra:
+
+#### Solución Óptima
+```
+🎯 Valor óptimo: Z = 15
+
+Variables:
+  x₁ = 5 (Producto A)
+  x₂ = 0 (Producto B)
+```
+
+#### Visualización Paso a Paso
+Tabla con cada iteración del método, mostrando:
+- Variables básicas y no básicas
+- Pivote seleccionado (resaltado en rojo)
+- Valores actualizados
+
+#### Análisis de Sensibilidad
+- Precios sombra de cada restricción
+- Rangos de optimalidad
+- Costos reducidos
+
+### Paso 6: Generar Informe (Opcional)
+
+Haz clic en **"🤖 Generar Informe Ejecutivo"** para obtener un análisis detallado con IA.
+
+## Ejemplo Completo: Fábrica de Muebles
+
+### Problema
+
+Una fábrica produce sillas y mesas:
+- Cada silla: 4h trabajo, 2 unidades madera → 70 dólares ganancia
+- Cada mesa: 6h trabajo, 3 unidades madera → 120 dólares ganancia
+- Disponible: 120 horas de trabajo, 72 unidades de madera
+- Objetivo: Maximizar ganancia
+
+### Modelo Extraído
+
+```
+Maximizar Z = 70x₁ + 120x₂
+
+Sujeto a:
+  4x₁ + 6x₂ ≤ 120
+  2x₁ + 3x₂ ≤ 72
+  x₁, x₂ ≥ 0
+```
+
+### Solución
+
+| Variable | Valor | Interpretación |
+|----------|-------|----------------|
+| x₁ | 30 | Producir 30 sillas |
+| x₂ | 0 | No producir mesas |
+| Z | 2,100 | Ganancia máxima |
+
+## Consejos de Uso
+
+1. **Sé específico**: Incluye unidades y contexto en tu descripción
+2. **Verifica el modelo**: Revisa que el modelo extraído sea correcto antes de resolver
+3. **Usa el método adecuado**: Sigue las sugerencias del sistema
+4. **Guarda los resultados**: Los archivos HTML se pueden guardar para referencia
